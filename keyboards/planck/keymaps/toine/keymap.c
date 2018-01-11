@@ -143,8 +143,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+// Shift vs capslock function
+void caps_tap (qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        register_code (KC_LSFT);
+    } else if (state->count == 2) {
+        unregister_code (KC_LSFT);
+        register_code (KC_CAPS);
+    }
+}
+void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        unregister_code (KC_LSFT);
+    } else {
+        unregister_code (KC_CAPS);
+    }
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [SFT_CAP] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
+  // Advanced tap dance feature allows for immediate response to shift
+  [SFT_CAP] = ACTION_TAP_DANCE_FN_ADVANCED(caps_tap, NULL, caps_tap_end),
   [TAB_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC)
 };
 

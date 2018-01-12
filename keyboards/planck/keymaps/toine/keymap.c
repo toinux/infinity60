@@ -32,11 +32,14 @@ enum planck_layers {
   _LOWER,
   _RAISE,
   _MOVE,
+  _GAMING,
   _ADJUST
 };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
+  GAMING_ON,
+  GAMING_OFF,
   LOWER,
   RAISE,
   BACKLIT
@@ -122,6 +125,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {_______, _______, _______,   _______, _______,_______,_______,_______,_______,_______,_______,_______}
 },
 
+/* Gaming
+ * ,-----------------------------------------------------------------------------------.
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |Enter |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Esc  |Brite | GUI  | Alt  |Lower | Space/move  |Raise |AltGr | Down |  Up  |Right |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_GAMING] = {
+  {KC_TAB , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,   KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
+  {KC_LCTL, KC_ESC, KC_LGUI, KC_LALT, LOWER,   KC_SPC, KC_SPC,  GAMING_OFF,   KC_RALT, KC_DOWN, KC_UP,   KC_RGHT}
+},
+
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
  * |Pause | Reset|      |      |      |      |      |      |      |      |      |  Del |
@@ -135,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = {
   {KC_PAUS, RESET,   DEBUG,    RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL },
-  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, _______,  _______,  _______},
+  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, _______,  _______,  GAMING_ON},
   {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 }
@@ -165,6 +186,11 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [SFT_CAP] = ACTION_TAP_DANCE_FN_ADVANCED(caps_tap, NULL, caps_tap_end),
   [TAB_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC)
 };
+
+#ifdef AUDIO_ENABLE
+  float gaming_song[][2]     = SONG(ZELDA_PUZZLE);
+  float gaming_gb_song[][2]  = SONG(ZELDA_TREASURE);
+#endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -205,6 +231,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(KC_RSFT);
         PORTE |= (1<<6);
+      }
+      return false;
+      break;
+    case GAMING_ON:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          stop_all_notes();
+          PLAY_SONG(gaming_song);
+        #endif
+        layer_off(_RAISE);
+        layer_off(_LOWER);
+        layer_off(_ADJUST);
+        layer_on(_GAMING);
+      }
+      return false;
+      break;
+    case GAMING_OFF:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_SONG(gaming_gb_song);
+        #endif
+        layer_off(_GAMING);
       }
       return false;
       break;

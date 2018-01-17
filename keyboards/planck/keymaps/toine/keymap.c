@@ -20,12 +20,13 @@
 extern keymap_config_t keymap_config;
 
 #define SPACEFN LT(_MOVE,KC_SPC)
+#define ESCFN LT(_MOVE,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 
-#define LG1 LGUI(KC_1)
-#define LG2 LGUI(KC_2)
-#define LG3 LGUI(KC_3)
-#define LG4 LGUI(KC_4)
+#define LG1 LGUI(KC_F1)
+#define LG2 LGUI(KC_F2)
+#define LG3 LGUI(KC_F3)
+#define LG4 LGUI(KC_F4)
 
 enum planck_layers {
   _QWERTY,
@@ -61,14 +62,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Esc  |Brite | GUI  | Alt  |Lower | Space/move  |Raise |AltGr | Down |  Up  |Right |
+ * |EscMov|Brite | GUI  | Alt  |Lower | Space/move  |Raise |AltGr | Down |  Up  | move |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
-  {KC_TAB ,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {KC_TAB     , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_LCTL    , KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
   {TD(SFT_CAP), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {KC_ESC     ,  BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,   KC_RALT, KC_DOWN, KC_UP,  KC_RGHT}
+  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  KC_RALT, KC_DOWN, KC_UP,   MO(_MOVE)}
 },
 
 /* Lower

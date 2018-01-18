@@ -19,8 +19,8 @@
 
 extern keymap_config_t keymap_config;
 
-#define SPACEFN LT(_MOVE,KC_SPC)
-#define ESCFN LT(_MOVE,KC_ESC)
+#define SPACEFN LT(_FN,KC_SPC)
+#define ESCFN LT(_FN,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 
 #define LG1 LGUI(KC_F1)
@@ -30,17 +30,16 @@ extern keymap_config_t keymap_config;
 
 enum planck_layers {
   _QWERTY,
+  _GAMING,
   _LOWER,
   _RAISE,
-  _MOVE,
-  _GAMING,
+  _FN,
   _ADJUST
 };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
-  GAMING_ON,
-  GAMING_OFF,
+  GAMING,
   LOWER,
   RAISE,
   BACKLIT
@@ -62,14 +61,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |EscMov|Brite | GUI  | Alt  |Lower | Space/move  |Raise |AltGr | Down |  Up  | move |
+ * |Esc/FN|Brite | GUI  | Alt  |Lower | Space/FN    |Raise |AltGr |      |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB     , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_LCTL    , KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
   {TD(SFT_CAP), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  KC_RALT, KC_DOWN, KC_UP,   MO(_MOVE)}
+  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
+},
+
+/* Gaming
+ * ,-----------------------------------------------------------------------------------.
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |Raise |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |Enter |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |Shift |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Ctrl | Esc  | GUI  | Alt  |Lower |    Space    |Raise |AltGr |      |TG(FN)|MO(FN)|
+ * `-----------------------------------------------------------------------------------'
+ */
+[_GAMING] = {
+  {KC_TAB , KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {RAISE,   KC_A,   KC_S,    KC_D,    KC_F,  KC_G,   KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {KC_LSFT, KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,   KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
+  {KC_LCTL, KC_ESC, KC_LGUI, KC_LALT, LOWER, KC_SPC, KC_SPC, RAISE, KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
 },
 
 /* Lower
@@ -108,47 +125,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU, KC_MUTE}
 },
 
-/* Move
+/* Functions
  * ,-----------------------------------------------------------------------------------.
  * |      | LG1  | LG2  | LG3  | LG4  |      |      |Pg Up |  Up  |Pg Dn | Ins  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |      |      |      | Home | Left | Down |Right |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |      | End  |      |      |      |      |
+ * |      |      |      |      |      |      |Space | End  |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_MOVE] = {
+[_FN] = {
   {_______, LG1    , LG2    ,   LG3    , LG4    ,_______,_______,KC_PGUP,KC_UP,  KC_PGDN,KC_INS ,KC_DEL},
   {_______, _______, _______,   _______, _______,_______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,_______,_______},
-  {_______, _______, _______,   _______, _______,_______,_______,KC_END ,_______,_______,_______,_______},
+  {_______, _______, _______,   _______, _______,_______,KC_SPC ,KC_END ,_______,_______,_______,_______},
   {_______, _______, _______,   _______, _______,_______,_______,_______,_______,_______,_______,_______}
-},
-
-/* Gaming
- * ,-----------------------------------------------------------------------------------.
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |Enter |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Esc  |Brite | GUI  | Alt  |Lower | Space/move  |Raise |AltGr | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
-[_GAMING] = {
-  {KC_TAB , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,   KC_K,    KC_L,    KC_SCLN, KC_ENT },
-  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
-  {KC_LCTL, KC_ESC, KC_LGUI, KC_LALT, LOWER,   KC_SPC, KC_SPC,  GAMING_OFF,   KC_RALT, KC_DOWN, KC_UP,   KC_RGHT}
 },
 
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
  * |Pause | Reset|      |      |      |      |      |      |      |      |      |  Del |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|      |      |      |      |
+ * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|      |      |      |Gaming|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -156,10 +155,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = {
-  {KC_PAUS, RESET,   DEBUG,    RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL },
-  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, _______,  _______,  GAMING_ON},
-  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
+  {KC_PAUS, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD,  KC_DEL },
+  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______,  _______, GAMING },
+  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______,  _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,  _______}
 }
 
 
@@ -235,25 +234,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case GAMING_ON:
+    case GAMING:
       if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
+        if (layer_state_is(_GAMING)) {
+          #ifdef AUDIO_ENABLE
           stop_all_notes();
-          PLAY_SONG(gaming_song);
-        #endif
-        layer_off(_RAISE);
-        layer_off(_LOWER);
-        layer_off(_ADJUST);
-        layer_on(_GAMING);
-      }
-      return false;
-      break;
-    case GAMING_OFF:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
           PLAY_SONG(gaming_gb_song);
-        #endif
-        layer_off(_GAMING);
+          #endif
+          layer_off(_GAMING);
+        } else {
+          #ifdef AUDIO_ENABLE
+	  stop_all_notes();
+	  PLAY_SONG(gaming_song);
+          #endif
+	  layer_off(_RAISE);
+	  layer_off(_LOWER);
+	  layer_off(_ADJUST);
+	  layer_on(_GAMING);
+        }
       }
       return false;
       break;

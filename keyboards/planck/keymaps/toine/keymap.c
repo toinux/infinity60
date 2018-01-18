@@ -79,14 +79,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl | Esc  | GUI  | Alt  |Lower |    Space    |Raise |AltGr |      |TG(FN)|MO(FN)|
+ * | Ctrl |Esc/FN| GUI  | Alt  |Lower |    Space    |Raise |AltGr |      |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_GAMING] = {
-  {KC_TAB , KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {RAISE,   KC_A,   KC_S,    KC_D,    KC_F,  KC_G,   KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT },
-  {KC_LSFT, KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,   KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {KC_LCTL, KC_ESC, KC_LGUI, KC_LALT, LOWER, KC_SPC, KC_SPC, RAISE, KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
+  {KC_TAB , KC_Q,  KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {RAISE,   KC_A,  KC_S,    KC_D,    KC_F,  KC_G,   KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {KC_LSFT, KC_Z,  KC_X,    KC_C,    KC_V,  KC_B,   KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
+  {KC_LCTL, ESCFN, KC_LGUI, KC_LALT, LOWER, KC_SPC, KC_SPC, RAISE, KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
 },
 
 /* Lower
@@ -247,9 +247,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	  stop_all_notes();
 	  PLAY_SONG(gaming_song);
           #endif
-	  layer_off(_RAISE);
-	  layer_off(_LOWER);
-	  layer_off(_ADJUST);
 	  layer_on(_GAMING);
         }
       }

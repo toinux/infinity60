@@ -23,10 +23,10 @@ extern keymap_config_t keymap_config;
 #define ESCFN LT(_FN,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 
-#define LG1 LGUI(KC_F1)
-#define LG2 LGUI(KC_F2)
-#define LG3 LGUI(KC_F3)
-#define LG4 LGUI(KC_F4)
+#define LG1 LSFT(LCTL(KC_F1))
+#define LG2 LSFT(LCTL(KC_F2))
+#define LG3 LSFT(LCTL(KC_F3))
+#define LG4 LSFT(LCTL(KC_F4))
 
 enum planck_layers {
   _QWERTY,

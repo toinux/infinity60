@@ -31,6 +31,7 @@ extern keymap_config_t keymap_config;
 enum planck_layers {
   _QWERTY,
   _GAMING,
+  _ACCENTS,
   _LOWER,
   _RAISE,
   _FN,
@@ -40,6 +41,7 @@ enum planck_layers {
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   GAMING,
+  ACCENTS,
   LOWER,
   RAISE,
   BACKLIT
@@ -61,14 +63,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Esc/FN|Brite | GUI  | Alt  |Lower | Space/FN    |Raise |AltGr |      |TG(FN)|MO(FN)|
+ * |Esc/FN|Brite | GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB     , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_LCTL    , KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
   {TD(SFT_CAP), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
+  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, TG(_FN), MO(_FN)}
 },
 
 /* Gaming
@@ -79,14 +81,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |Shift |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Ctrl |Esc/FN| GUI  | Alt  |Lower |    Space    |Raise |AltGr |      |TG(FN)|MO(FN)|
+ * | Ctrl | Esc  | GUI  | Alt  |Lower |    Space    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_GAMING] = {
-  {KC_TAB , KC_Q,  KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {RAISE,   KC_A,  KC_S,    KC_D,    KC_F,  KC_G,   KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT },
-  {KC_LSFT, KC_Z,  KC_X,    KC_C,    KC_V,  KC_B,   KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {KC_LCTL, ESCFN, KC_LGUI, KC_LALT, LOWER, KC_SPC, KC_SPC, RAISE, KC_RALT, XXXXXXX, TG(_FN), MO(_FN)}
+  {KC_TAB , KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {RAISE,   KC_A,   KC_S,    KC_D,    KC_F,  KC_G,   KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {KC_LSFT, KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,   KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
+  {KC_LCTL, KC_ESC, KC_LGUI, KC_LALT, LOWER, KC_SPC, KC_SPC, RAISE, ACCENTS, KC_RALT, TG(_FN), MO(_FN)}
+},
+
+/* Accents, see http://marin.jb.free.fr/qwerty-fr/
+ * ,-----------------------------------------------------------------------------------.
+ * |      |   â  |   é  |   è  |   ê  | EURO |      |   û  |   î  |   ô  |  oe  |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |   à  |   æ  |   ë  |      |      |      |   ü  |   ï  |   ö  |      |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |   ä  |      |   ç  |      |      |      |      |      |   °  |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |             |      |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_ACCENTS] = {
+  {_______ , _______,  _______, _______, KC_4,   KC_5,     _______, KC_8,    KC_9,    KC_0,    _______, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
 /* Lower
@@ -218,6 +238,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      }
+      return false;
+      break;
+    case ACCENTS:
+      if (record->event.pressed) {
+	  layer_on(_ACCENTS);
+	  register_code(KC_RALT);
+      } else {
+	  unregister_code(KC_RALT);
+	  layer_off(_ACCENTS);
       }
       return false;
       break;

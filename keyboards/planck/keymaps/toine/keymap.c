@@ -22,6 +22,7 @@ extern keymap_config_t keymap_config;
 #define SPACEFN LT(_FN,KC_SPC)
 #define ESCFN LT(_FN,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
+#define NUMPAD MO(_NUMPAD)
 
 #define LG1 LSFT(LCTL(KC_F1))
 #define LG2 LSFT(LCTL(KC_F2))
@@ -35,6 +36,7 @@ enum planck_layers {
   _LOWER,
   _RAISE,
   _FN,
+  _NUMPAD,
   _ADJUST
 };
 
@@ -63,14 +65,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Esc/FN|Brite | GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
+ * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
-  {KC_TAB     , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {KC_LCTL    , KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
-  {TD(SFT_CAP), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {ESCFN      , BACKLIT, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, TG(_FN), MO(_FN)}
+  {KC_TAB     , KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
+  {KC_LCTL    , KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {TD(SFT_CAP), KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
+  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, TG(_FN), MO(_FN)}
 },
 
 /* Gaming
@@ -93,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Accents, see http://marin.jb.free.fr/qwerty-fr/
  * ,-----------------------------------------------------------------------------------.
- * |      |   â  |   é  |   è  |   ê  |   €  |  û   |   ù   |   î  |   ô  |  œ   |      |
+ * |      |   â  |   é  |   è  |   ê  |   €  |  û   |   ù  |   î  |   ô  |  œ   |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |   à  |   æ  |   ë  |      |      |      |   ü  |   ï  |   ö  |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
@@ -161,6 +163,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {_______, _______, _______,   _______, _______,_______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,_______,_______},
   {_______, _______, _______,   _______, _______,_______,KC_SPC ,KC_END ,_______,_______,_______,_______},
   {_______, _______, _______,   _______, _______,_______,_______,_______,_______,_______,_______,_______}
+},
+
+/* Numpad
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |      |      |      |  7   |  8   |  9   |  -   |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |  4   |  5   |  6   |  +   |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |  1   |  2   |  3   |  /   |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |             |  0   |  .   |  =   |  *   |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_NUMPAD] = {
+  {_______ , _______,  _______, _______, _______, _______, _______, KC_P7, KC_P8,   KC_P9,     KC_PMNS, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, KC_P4, KC_P5,   KC_P6,     KC_PPLS, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, KC_P1, KC_P2,   KC_P3,     KC_PSLS, _______},
+  {_______ , _______,  _______, _______, _______, _______, _______, KC_P0, KC_PDOT, KC_EQUAL,  KC_PAST, _______}
 },
 
 /* Adjust (Lower + Raise)

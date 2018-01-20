@@ -23,7 +23,6 @@ extern keymap_config_t keymap_config;
 #define ESCFN LT(_FN,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 #define NUMPAD MO(_NUMPAD)
-#define TG_NKRO MAGIC_TOGGLE_NKRO
 
 #define LG1 LSFT(LCTL(KC_F1))
 #define LG2 LSFT(LCTL(KC_F2))
@@ -45,6 +44,7 @@ enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   GAMING,
   ACCENTS,
+  TGNKRO,
   LOWER,
   RAISE,
   BACKLIT
@@ -197,7 +197,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = {
   {KC_PAUS, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD,  KC_DEL },
-  {KC_PSCR,TG_NKRO,  MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______,  _______, GAMING },
+  {KC_PSCR,TGNKRO,   MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______,  _______, GAMING },
   {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______,  _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,  _______}
 }
@@ -231,6 +231,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #ifdef AUDIO_ENABLE
   float gaming_song[][2]     = SONG(ZELDA_PUZZLE);
   float gaming_gb_song[][2]  = SONG(ZELDA_TREASURE);
+  float nkro_song[][2]     = SONG(CAPS_LOCK_ON_SOUND);
+  float nkro_gb_song[][2]  = SONG(CAPS_LOCK_OFF_SOUND);
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -269,6 +271,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
 	  unregister_code(KC_RALT);
 	  layer_off(_ACCENTS);
+      }
+      return false;
+      break;
+    case TGNKRO:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+        stop_all_notes();
+        if (keymap_config.nkro) {
+          PLAY_SONG(nkro_gb_song);
+        } else {
+          PLAY_SONG(nkro_song);
+        }
+        #endif
+        if (!eeconfig_is_enabled()) {
+            eeconfig_init();
+        }
+        keymap_config.raw = eeconfig_read_keymap();
+        keymap_config.nkro = !keymap_config.nkro;
+        eeconfig_update_keymap(keymap_config.raw);	
       }
       return false;
       break;

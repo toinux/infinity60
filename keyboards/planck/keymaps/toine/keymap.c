@@ -23,6 +23,7 @@ extern keymap_config_t keymap_config;
 #define ESCFN LT(_FN,KC_ESC)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 #define NUMPAD MO(_NUMPAD)
+#define MOUSE MO(_MOUSE)
 
 #define LG1 LSFT(LCTL(KC_F1))
 #define LG2 LSFT(LCTL(KC_F2))
@@ -37,6 +38,7 @@ enum planck_layers {
   _RAISE,
   _FN,
   _NUMPAD,
+  _MOUSE,
   _ADJUST
 };
 
@@ -66,14 +68,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
+ * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |MOUSE |MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB     , KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_LCTL    , KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
   {TD(SFT_CAP), KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, TG(_FN), MO(_FN)}
+  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, MOUSE,   MO(_FN)}
 },
 
 /* Gaming
@@ -182,6 +184,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   {_______ , _______,  _______, _______, _______, _______, _______, KC_4, KC_5,   KC_6,     KC_PLUS, _______},
   {_______ , _______,  _______, _______, _______, _______, _______, KC_1, KC_2,   KC_3,     KC_SLSH, _______},
   {_______ , _______,  _______, _______, _______, _______, _______, KC_0, KC_DOT, KC_EQUAL, KC_ASTR, _______}
+},
+
+/* Mouse
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |Wh up |Ms up |Wh dn |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |Ms lft|Ms dn |Ms rgt|      |      | btn1 | btn3 | btn2 |      |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |Wh lft|      |Wh rgt|      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |             |      |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_MOUSE] = {
+  {_______, _______, KC_WH_U,  KC_MS_U, KC_WH_D, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, KC_MS_L,  KC_MS_D, KC_MS_R, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______},
+  {_______, _______, KC_WH_L,  _______, KC_WH_R, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
 /* Adjust (Lower + Raise)

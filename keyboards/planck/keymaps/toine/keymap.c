@@ -21,6 +21,8 @@ extern keymap_config_t keymap_config;
 
 #define SPACEFN LT(_FN,KC_SPC)
 #define ESCFN LT(_FN,KC_ESC)
+#define ACSCLN LT(_ACCENTS,KC_SCLN)
+#define ACCENTS MO(_ACCENTS)
 #define SFTQUOT MT(MOD_RSFT,KC_QUOT)
 #define NUMPAD MO(_NUMPAD)
 #define MOUSE MO(_MOUSE)
@@ -45,7 +47,6 @@ enum planck_layers {
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   GAMING,
-  ACCENTS,
   TGNKRO,
   LOWER,
   RAISE,
@@ -64,18 +65,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |Enter |
+ * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |Acct/;|Enter |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Sft/' |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |MOUSE |MO(FN)|
+ * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |MOUSE |AltGr |TG(FN)|MO(FN)|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB     , KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {KC_LCTL    , KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
+  {KC_LCTL    , KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    ACSCLN,  KC_ENT },
   {TD(SFT_CAP), KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTQUOT},
-  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS, KC_RALT, MOUSE,   MO(_FN)}
+  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  MOUSE,   KC_RALT, TG(_FN),  MO(_FN)}
 },
 
 /* Gaming
@@ -108,10 +109,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ACCENTS] = {
-  {_______ , _______,  _______, _______, KC_4,   KC_5,     KC_8,    _______,    KC_9,    KC_0, _______, _______},
-  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
-  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
-  {_______ , _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
+  {_______ , RALT(KC_Q), RALT(KC_W), RALT(KC_E), RALT(KC_4), RALT(KC_5), RALT(KC_8), RALT(KC_U), RALT(KC_9), RALT(KC_0),   RALT(KC_P), _______},
+  {_______ , RALT(KC_A), RALT(KC_S), RALT(KC_D), _______,    _______,    _______,    RALT(KC_J), RALT(KC_K), RALT(KC_L),   _______,    _______},
+  {_______ , RALT(KC_Z), _______,    RALT(KC_C), _______,    _______,    _______,    _______,    _______,    RALT(KC_DOT), _______,    _______},
+  {_______ , _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,    _______,      _______,    _______}
 },
 
 /* Lower
@@ -154,7 +155,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      | LG1  | LG2  | LG3  | LG4  |      |      |Pg Up |  Up  |Pg Dn | Ins  | Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |      |      |      | Home | Left | Down |Right |MOUSE |      |
+ * |      |      |      |      |      |      | Home | Left | Down |Right |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |      |      |      |      |      |Space | End  |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -163,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_FN] = {
   {_______, LG1    , LG2    ,   LG3    , LG4    ,_______,_______,KC_PGUP,KC_UP,  KC_PGDN,KC_INS ,KC_DEL},
-  {_______, _______, _______,   _______, _______,_______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,MOUSE,  _______},
+  {_______, _______, _______,   _______, _______,_______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,_______,_______},
   {_______, _______, _______,   _______, _______,_______,KC_SPC ,KC_END ,_______,_______,_______,_______},
   {_______, _______, _______,   _______, _______,_______,_______,_______,_______,_______,_______,_______}
 },
@@ -281,16 +282,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ACCENTS:
-      if (record->event.pressed) {
-	  layer_on(_ACCENTS);
-	  register_code(KC_RALT);
-      } else {
-	  unregister_code(KC_RALT);
-	  layer_off(_ACCENTS);
       }
       return false;
       break;

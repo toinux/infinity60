@@ -3,6 +3,12 @@
 
 #include "config_common.h"
 
+/*
+ Because C7 pin was dead (column 3), rewired on D3 instead, cf. https://imgur.com/a/bjFru
+ */
+#undef MATRIX_COL_PINS
+#define MATRIX_COL_PINS { F1, F0, B0, D3, F4, F5, F6, F7, D4, D6, B4, D7 }
+
 #ifdef AUDIO_ENABLE
     #define STARTUP_SONG SONG(PLANCK_SOUND)
     // #define STARTUP_SONG SONG(NO_SOUND)

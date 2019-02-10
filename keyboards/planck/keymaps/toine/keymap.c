@@ -252,7 +252,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 };
 
 #ifdef AUDIO_ENABLE
-  float gaming_song[][2]     = SONG(ZELDA_PUZZLE);
+  float gaming_song[][2]     = SONG(OVERWATCH_THEME);
   float gaming_gb_song[][2]  = SONG(ZELDA_TREASURE);
   float nkro_song[][2]     = SONG(CAPS_LOCK_ON_SOUND);
   float nkro_gb_song[][2]  = SONG(CAPS_LOCK_OFF_SOUND);

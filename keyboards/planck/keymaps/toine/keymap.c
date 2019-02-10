@@ -256,6 +256,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   float gaming_gb_song[][2]  = SONG(ZELDA_TREASURE);
   float nkro_song[][2]     = SONG(CAPS_LOCK_ON_SOUND);
   float nkro_gb_song[][2]  = SONG(CAPS_LOCK_OFF_SOUND);
+  float num_lock_song[][2]  = SONG(NUM_LOCK_ON_SOUND);
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -334,6 +335,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           #endif
 	  layer_on(_GAMING);
         }
+      }
+      return false;
+      break;
+    case NUMPAD:
+      if (record->event.pressed) {
+	  // enforce numlock when switching to NUMPAD layer
+	  if (!(host_keyboard_leds() & (1<<USB_LED_NUM_LOCK))) {
+            #ifdef AUDIO_ENABLE
+            stop_all_notes();
+	    PLAY_SONG(num_lock_song);
+            #endif
+	    register_code(KC_NUMLOCK);
+	    unregister_code(KC_NUMLOCK);
+	  }
       }
       return false;
       break;

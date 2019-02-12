@@ -58,6 +58,7 @@ enum planck_keycodes {
 // Tap Dance Declarations
 enum {
   SFT_CAP = 0,
+  FN_RCTL,
   TAB_ESC // finalement pas utilisé pour l'instant
 };
 
@@ -71,14 +72,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |SftEnt|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|MO(FN)|
+ * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|FNRCTL|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB     , KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {CTRLSC     , KC_A,   KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    MOSCLN,  KC_QUOT },
   {TD(SFT_CAP), KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTENT},
-  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS,   KC_RALT, TG(_FN),  MO(_FN)}
+  {ESCFN      , NUMPAD, KC_LGUI, KC_LALT, LOWER,   SPACEFN, SPACEFN,  RAISE,  ACCENTS,   KC_RALT, TG(_FN),  TD(FN_RCTL)}
 },
 
 /* Gaming
@@ -245,9 +246,27 @@ void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
+// FN layer vs KC_RCTRL
+void rctl_tap (qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        layer_on (_FN);
+    } else if (state->count == 2) {
+        layer_off (_FN);
+        register_code (KC_RCTL);
+    }
+}
+void rctl_tap_end (qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        layer_off (_FN);
+    } else {
+        unregister_code (KC_RCTL);
+    }
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
   // Advanced tap dance feature allows for immediate response to shift
   [SFT_CAP] = ACTION_TAP_DANCE_FN_ADVANCED(caps_tap, NULL, caps_tap_end),
+  [FN_RCTL] = ACTION_TAP_DANCE_FN_ADVANCED(rctl_tap, NULL, rctl_tap_end),
   [TAB_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC)
 };
 

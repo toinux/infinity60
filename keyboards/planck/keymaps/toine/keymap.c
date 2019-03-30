@@ -49,6 +49,7 @@ enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   GAMING,
   TGNKRO,
+  CAPSLCK,
   BACKLIT
 };
 
@@ -57,9 +58,9 @@ enum planck_keycodes {
 
 // Tap Dance Declarations
 enum {
-  SFT_CAP = 0,
-  FN_RCTL,
-  TAB_ESC // finalement pas utilisé pour l'instant
+  FN_RCTL = 0
+//  SFT_CAP, // on ne l'utilise plus, le double tap shift étant préféré dans intellij
+//  TAB_ESC // finalement pas utilisé pour l'instant
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -70,16 +71,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |CtrlSc|   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |Mous/;|  '   |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |SftCap|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |SftEnt|
+ * |Shift |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |SftEnt|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |Esc/FN|NUMPAD| GUI  | Alt  |Lower | Space/FN    |Raise |ACCENT|AltGr |TG(FN)|FNRCTL|
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
-  KC_TAB,      KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC,
-  CTRLSC,      KC_A,   KC_S,    KC_D,    KC_F,  KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    MOSCLN,  KC_QUOT,
-  TD(SFT_CAP), KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTENT,
-  ESCFN,       NUMPAD, KC_LGUI, KC_LALT, LOWER, SPACEFN, SPACEFN, RAISE, ACCENTS, KC_RALT, TG(_FN), TD(FN_RCTL)
+  KC_TAB,  KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,    KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC,
+  CTRLSC,  KC_A,   KC_S,    KC_D,    KC_F,  KC_G,    KC_H,    KC_J,  KC_K,    KC_L,    MOSCLN,  KC_QUOT,
+  KC_LSFT, KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,    KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH, SFTENT,
+  ESCFN,   NUMPAD, KC_LGUI, KC_LALT, LOWER, SPACEFN, SPACEFN, RAISE, ACCENTS, KC_RALT, TG(_FN), TD(FN_RCTL)
 ),
 
 /* Gaming
@@ -214,7 +215,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |PrtScr|TGNKRO|MusMod|Aud on|Audoff|AGnorm|AGswap|Qwerty|      |      |      |Gaming|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|TermOn|TermOf|      |      |      |
+ * | Caps |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|TermOn|TermOf|      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -222,15 +223,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] = LAYOUT_planck_grid(
   KC_PAUS, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD,  KC_DEL ,
   KC_PSCR, TGNKRO,  MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______,  _______, GAMING ,
-  _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______,  _______,
+  CAPSLCK, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______,  _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,  _______
 )
 
 
 };
 
+
 // Shift vs capslock function
-void caps_tap (qk_tap_dance_state_t *state, void *user_data) {
+/* void caps_tap (qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
         register_code (KC_LSFT);
     } else if (state->count == 2) {
@@ -245,7 +247,7 @@ void caps_tap_end (qk_tap_dance_state_t *state, void *user_data) {
         unregister_code (KC_CAPS);
     }
 }
-
+ */
 // FN layer vs KC_RCTRL
 void rctl_tap (qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 1) {
@@ -265,16 +267,16 @@ void rctl_tap_end (qk_tap_dance_state_t *state, void *user_data) {
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   // Advanced tap dance feature allows for immediate response to shift
-  [SFT_CAP] = ACTION_TAP_DANCE_FN_ADVANCED(caps_tap, NULL, caps_tap_end),
-  [FN_RCTL] = ACTION_TAP_DANCE_FN_ADVANCED(rctl_tap, NULL, rctl_tap_end),
-  [TAB_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC)
+//  [SFT_CAP] = ACTION_TAP_DANCE_FN_ADVANCED(caps_tap, NULL, caps_tap_end),
+  [FN_RCTL] = ACTION_TAP_DANCE_FN_ADVANCED(rctl_tap, NULL, rctl_tap_end)
+//  [TAB_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC)
 };
 
 #ifdef AUDIO_ENABLE
   float gaming_song[][2]     = SONG(OVERWATCH_THEME);
   float gaming_gb_song[][2]  = SONG(ZELDA_TREASURE);
-  float nkro_song[][2]     = SONG(CAPS_LOCK_ON_SOUND);
-  float nkro_gb_song[][2]  = SONG(CAPS_LOCK_OFF_SOUND);
+  float capslock_song[][2]     = SONG(CAPS_LOCK_ON_SOUND);
+  float capslock_gb_song[][2]  = SONG(CAPS_LOCK_OFF_SOUND);
   float num_lock_song[][2]  = SONG(NUM_LOCK_ON_SOUND);
 #endif
 
@@ -296,9 +298,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         #ifdef AUDIO_ENABLE
         stop_all_notes();
         if (keymap_config.nkro) {
-          PLAY_SONG(nkro_gb_song);
+          PLAY_SONG(capslock_gb_song);
         } else {
-          PLAY_SONG(nkro_song);
+          PLAY_SONG(capslock_song);
         }
         #endif
         if (!eeconfig_is_enabled()) {
@@ -341,17 +343,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case CAPSLCK:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+        stop_all_notes();
+	      if (!(host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+	        PLAY_SONG(capslock_song);
+        } else {
+          PLAY_SONG(capslock_gb_song);
+        }
+        #endif
+	      register_code(KC_CAPSLOCK);
+	      unregister_code(KC_CAPSLOCK);
+      }
+      return false;
+      break;
     case NUMPAD:
       if (record->event.pressed) {
-	  // enforce numlock when switching to NUMPAD layer
-	  if (!(host_keyboard_leds() & (1<<USB_LED_NUM_LOCK))) {
-            #ifdef AUDIO_ENABLE
+	      // enforce numlock when switching to NUMPAD layer
+	      if (!(host_keyboard_leds() & (1<<USB_LED_NUM_LOCK))) {
+          #ifdef AUDIO_ENABLE
             stop_all_notes();
-	    PLAY_SONG(num_lock_song);
-            #endif
-	    register_code(KC_NUMLOCK);
-	    unregister_code(KC_NUMLOCK);
-	  }
+	          PLAY_SONG(num_lock_song);
+          #endif
+	        register_code(KC_NUMLOCK);
+	        unregister_code(KC_NUMLOCK);
+	      }
       }
       return true;
       break;

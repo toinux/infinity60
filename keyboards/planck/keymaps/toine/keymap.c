@@ -16,8 +16,6 @@
 
 #include QMK_KEYBOARD_H
 
-extern keymap_config_t keymap_config;
-
 #define SPACEFN LT(_FN,KC_SPC)
 #define ESCFN LT(_FN,KC_ESC)
 #define CTRLSC LCTL_T(KC_ESC)
